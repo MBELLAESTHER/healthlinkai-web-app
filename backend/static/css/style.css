@@ -1,0 +1,285 @@
+/* Custom styles for HealthLinkAI - MindWell */
+/* Enhanced Tailwind CSS with soft shadows, hover states, focus rings, and teal accents */
+
+/* Soft shadows */
+.shadow-soft {
+    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-soft-lg {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Teal accent colors */
+.text-teal-accent { color: #0d9488; }
+.bg-teal-accent { background-color: #0d9488; }
+.border-teal-accent { border-color: #0d9488; }
+
+/* Enhanced focus rings */
+.focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1), 0 0 0 1px #0d9488;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #0d9488;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0f766e;
+    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1), 0 0 0 1px #0d9488;
+}
+
+.btn-secondary {
+    background-color: #e5e7eb;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #d1d5db;
+    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+}
+
+.btn-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1), 0 0 0 1px #0d9488;
+}
+
+/* Card hover states */
+.card-interactive {
+    transition: all 0.3s ease;
+}
+
+.card-interactive:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+/* Input enhancements */
+.input-enhanced {
+    transition: all 0.2s ease;
+}
+
+.input-enhanced:hover {
+    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+.input-enhanced:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1), 0 0 0 1px #0d9488;
+}
+
+/* Additional animations and utilities */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Chat message animations */
+.message-enter {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading dots animation */
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60% { content: '...'; }
+    90%, 100% { content: ''; }
+}
+
+/* Hover effects for cards */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Custom gradient backgrounds */
+.gradient-teal {
+    background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+}
+
+.gradient-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.gradient-blue {
+    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+}
+
+/* Risk level indicators */
+.risk-low {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #22c55e;
+}
+
+.risk-medium {
+    background-color: #fef3c7;
+    color: #92400e;
+    border-color: #f59e0b;
+}
+
+.risk-high {
+    background-color: #fed7aa;
+    color: #c2410c;
+    border-color: #f97316;
+}
+
+.risk-urgent {
+    background-color: #fecaca;
+    color: #dc2626;
+    border-color: #ef4444;
+}
+
+/* Form enhancements */
+.form-input {
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Button enhancements */
+.btn-primary {
+    background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #134e4a 0%, #0f766e 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile responsiveness enhancements */
+@media (max-width: 640px) {
+    .mobile-padding {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .mobile-hidden {
+        display: none;
+    }
+}
+
+/* Accessibility improvements */
+.focus-visible:focus {
+    outline: 2px solid #14b8a6;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-friendly {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+    .dark-mode-ready {
+        background-color: #1f2937;
+        color: #f9fafb;
+    }
+}
+
+/* Custom utilities */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(10px);
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Subscription Plans - HealthLinkAI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
+            <p class="text-xl text-gray-600">Unlock the full potential of HealthLinkAI</p>
+        </div>
+
+        <!-- Current Usage Summary -->
+        {% if usage_summary %}
+        <div class="bg-white rounded-2xl shadow-soft p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Your Current Usage</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {% for feature, data in usage_summary.features.items() %}
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h3 class="font-medium text-gray-900 capitalize">{{ feature.replace('_', ' ') }}</h3>
+                    <div class="mt-2">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>{{ data.current }} / {{ data.limit }}</span>
+                            <span>{{ data.remaining }} remaining</span>
+                        </div>
+                        {% if data.limit != 'Unlimited' %}
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div class="bg-teal-600 h-2 rounded-full transition-all duration-300" data-width="{{ data.percentage }}"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Free Plan -->
+            <div class="bg-white rounded-2xl shadow-soft p-8 {% if current_plan == 'free' %}ring-2 ring-teal-500{% endif %}">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-gray-900">Free</h3>
+                    <div class="mt-4 flex items-baseline justify-center">
+                        <span class="text-5xl font-extrabold text-gray-900">$0</span>
+                        <span class="ml-1 text-xl font-semibold text-gray-500">/month</span>
+                    </div>
+                    {% if current_plan == 'free' %}
+                    <span class="inline-block mt-4 px-4 py-2 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">Current Plan</span>
+                    {% endif %}
+                </div>
+                
+                <ul class="mt-8 space-y-4">
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 text-gray-700">5 symptom checks per day</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 text-gray-700">10 MindWell chat messages per day</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 text-gray-700">3 provider lookups per day</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3 text-gray-700">Basic health insights</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl shadow-soft-lg p-8 text-white relative {% if current_plan == 'premium' %}ring-2 ring-yellow-400{% endif %}">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4">
+                    <span class="inline-block px-4 py-2 bg-yellow-400 text-yellow-900 rounded-full text-sm font-bold">RECOMMENDED</span>
+                </div>
+                
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold">Premium</h3>
+                    <div class="mt-4 flex items-baseline justify-center">
+                        <span class="text-5xl font-extrabold">$9.99</span>
+                        <span class="ml-1 text-xl font-semibold text-teal-200">/month</span>
+                    </div>
+                    {% if current_plan == 'premium' %}
+                    <span class="inline-block mt-4 px-4 py-2 bg-yellow-400 text-yellow-900 rounded-full text-sm font-medium">Current Plan</span>
+                    {% endif %}
+                </div>
+                
+                <ul class="mt-8 space-y-4">
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Unlimited symptom checks</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Unlimited MindWell chat</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Unlimited provider searches</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Priority MindWell responses</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Request doctor callback</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">Advanced health analytics</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="flex-shrink-0 w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-3">24/7 priority support</span>
+                    </li>
+                </ul>
+                
+                {% if current_plan != 'premium' %}
+                <div class="mt-8">
+                    <form method="POST" action="{{ url_for('subscribe') }}">
+                        <input type="hidden" name="plan" value="premium">
+                        <button type="submit" class="w-full bg-yellow-400 text-yellow-900 py-3 px-6 rounded-lg font-bold text-lg hover:bg-yellow-300 transition-colors">
+                            Upgrade to Premium
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Frequently Asked Questions</h2>
+            <div class="bg-white rounded-2xl shadow-soft p-8">
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Can I cancel anytime?</h3>
+                        <p class="text-gray-600 mt-1">Yes, you can cancel your subscription at any time. No long-term commitments.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">What payment methods do you accept?</h3>
+                        <p class="text-gray-600 mt-1">We accept all major credit cards, mobile money, and bank transfers through our secure payment partners.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Is my health data secure?</h3>
+                        <p class="text-gray-600 mt-1">Absolutely. We use end-to-end encryption and comply with international healthcare data protection standards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+// Set progress bar widths after page load
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('[data-width]');
+    progressBars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = Math.min(100, Math.max(0, parseFloat(width))) + '%';
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block title %}Symptom Checker - HealthLinkAI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-cool-gray-900 mb-4">
+            AI Symptom Checker
+        </h1>
+        <p class="text-xl text-cool-gray-600 max-w-2xl mx-auto">
+            Select your symptoms and get instant AI-powered health insights and recommendations.
+        </p>
+    </div>
+
+    <!-- Multi-step Progress -->
+    <div class="mb-8">
+        <div class="flex items-center justify-center space-x-4">
+            <div class="flex items-center">
+                <div id="step1-indicator" class="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+                <span class="ml-2 text-sm font-medium text-teal-600">Symptoms</span>
+            </div>
+            <div class="w-16 h-0.5 bg-cool-gray-300"></div>
+            <div class="flex items-center">
+                <div id="step2-indicator" class="w-8 h-8 bg-cool-gray-300 text-cool-gray-600 rounded-full flex items-center justify-center text-sm font-medium">2</div>
+                <span class="ml-2 text-sm font-medium text-cool-gray-600">Details</span>
+            </div>
+            <div class="w-16 h-0.5 bg-cool-gray-300"></div>
+            <div class="flex items-center">
+                <div id="step3-indicator" class="w-8 h-8 bg-cool-gray-300 text-cool-gray-600 rounded-full flex items-center justify-center text-sm font-medium">3</div>
+                <span class="ml-2 text-sm font-medium text-cool-gray-600">Results</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: Symptom Selection -->
+    <div id="step1" class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <h2 class="text-xl font-semibold text-cool-gray-900 mb-6">Select Your Symptoms</h2>
+        
+        <!-- Common Symptom Chips -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-cool-gray-700 mb-3">Common Symptoms</label>
+            <div class="flex flex-wrap gap-2" id="symptom-chips">
+                <button type="button" class="symptom-chip" data-symptom="headache">Headache</button>
+                <button type="button" class="symptom-chip" data-symptom="fever">Fever</button>
+                <button type="button" class="symptom-chip" data-symptom="cough">Cough</button>
+                <button type="button" class="symptom-chip" data-symptom="sore_throat">Sore Throat</button>
+                <button type="button" class="symptom-chip" data-symptom="nausea">Nausea</button>
+                <button type="button" class="symptom-chip" data-symptom="fatigue">Fatigue</button>
+                <button type="button" class="symptom-chip" data-symptom="dizziness">Dizziness</button>
+                <button type="button" class="symptom-chip" data-symptom="chest_pain">Chest Pain</button>
+                <button type="button" class="symptom-chip" data-symptom="shortness_breath">Shortness of Breath</button>
+                <button type="button" class="symptom-chip" data-symptom="stomach_pain">Stomach Pain</button>
+                <button type="button" class="symptom-chip" data-symptom="back_pain">Back Pain</button>
+                <button type="button" class="symptom-chip" data-symptom="muscle_aches">Muscle Aches</button>
+            </div>
+        </div>
+
+        <!-- Additional Symptoms -->
+        <div class="mb-6">
+            <label for="additional-symptoms" class="block text-sm font-medium text-cool-gray-700 mb-2">
+                Additional Symptoms (Optional)
+            </label>
+            <textarea id="additional-symptoms" name="additional-symptoms" rows="3" 
+                      placeholder="Describe any other symptoms not listed above..."
+                      class="w-full px-4 py-3 border border-cool-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"></textarea>
+        </div>
+
+        <div class="flex justify-end">
+            <button type="button" id="next-step1" class="bg-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors disabled:opacity-50" disabled>
+                Next: Details →
+            </button>
+        </div>
+    </div>
+
+    <!-- Step 2: Details -->
+    <div id="step2" class="bg-white rounded-2xl shadow-lg p-8 mb-8 hidden">
+        <h2 class="text-xl font-semibold text-cool-gray-900 mb-6">Provide Additional Details</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <label for="age" class="block text-sm font-medium text-cool-gray-700 mb-2">Age *</label>
+                <input type="number" id="age" name="age" min="1" max="120" required
+                       class="w-full px-4 py-3 border border-cool-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                       aria-describedby="age-help">
+                <p id="age-help" class="text-xs text-cool-gray-500 mt-1">Required for accurate analysis</p>
+            </div>
+            <div>
+                <label for="gender" class="block text-sm font-medium text-cool-gray-700 mb-2">Gender</label>
+                <select id="gender" name="gender" 
+                        class="w-full px-4 py-3 border border-cool-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer_not_to_say">Prefer not to say</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-cool-gray-700 mb-3">How long have you had these symptoms?</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <label class="flex items-center p-3 border border-cool-gray-300 rounded-lg cursor-pointer hover:bg-cool-gray-50">
+                    <input type="radio" name="duration" value="hours" class="mr-2 text-teal-600">
+                    <span class="text-sm">Few hours</span>
+                </label>
+                <label class="flex items-center p-3 border border-cool-gray-300 rounded-lg cursor-pointer hover:bg-cool-gray-50">
+                    <input type="radio" name="duration" value="1-2_days" class="mr-2 text-teal-600">
+                    <span class="text-sm">1-2 days</span>
+                </label>
+                <label class="flex items-center p-3 border border-cool-gray-300 rounded-lg cursor-pointer hover:bg-cool-gray-50">
+                    <input type="radio" name="duration" value="3-7_days" class="mr-2 text-teal-600">
+                    <span class="text-sm">3-7 days</span>
+                </label>
+                <label class="flex items-center p-3 border border-cool-gray-300 rounded-lg cursor-pointer hover:bg-cool-gray-50">
+                    <input type="radio" name="duration" value="weeks" class="mr-2 text-teal-600">
+                    <span class="text-sm">Weeks</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-cool-gray-700 mb-3">
+                Severity Level: <span id="severity-display" class="font-semibold text-teal-600">5</span>/10
+            </label>
+            <input type="range" id="severity" name="severity" min="1" max="10" value="5" 
+                   class="w-full h-2 bg-cool-gray-200 rounded-lg appearance-none cursor-pointer slider">
+            <div class="flex justify-between text-xs text-cool-gray-500 mt-1">
+                <span>1 (Mild)</span>
+                <span>10 (Severe)</span>
+            </div>
+        </div>
+
+        <div class="flex justify-between">
+            <button type="button" id="back-step2" class="bg-cool-gray-200 text-cool-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-cool-gray-300 transition-colors">
+                ← Back
+            </button>
+            <button type="button" id="analyze-symptoms" class="bg-teal-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-teal-700 transition-colors disabled:opacity-50">
+                <span class="analyze-text">Analyze Symptoms</span>
+                <span class="loading-text hidden">Analyzing...</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="hidden">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-cool-gray-900 mb-6">Analysis Results</h2>
+            
+            <!-- Risk Level -->
+            <div id="risk-level" class="mb-6">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+
+            <!-- Possible Conditions -->
+            <div id="conditions" class="mb-6">
+                <h3 class="text-lg font-semibold text-cool-gray-800 mb-4">Possible Conditions</h3>
+                <div id="conditions-list">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div id="recommendations" class="mb-6">
+                <h3 class="text-lg font-semibold text-cool-gray-800 mb-4">Recommendations</h3>
+                <div id="recommendations-list">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div id="next-steps" class="bg-teal-50 rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-teal-800 mb-4">Recommended Next Steps</h3>
+                <div id="next-steps-list">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Warning -->
+    <div class="bg-red-50 border-l-4 border-red-400 p-4 mt-8 rounded-r-lg">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-red-800">
+                    <strong>Emergency Warning:</strong> If you are experiencing severe symptoms, chest pain, difficulty breathing, or any life-threatening condition, call emergency services (911) immediately. This tool is not a substitute for professional medical care.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.symptom-chip {
+    @apply px-4 py-2 bg-cool-gray-100 text-cool-gray-700 rounded-full text-sm font-medium border border-cool-gray-300 hover:bg-teal-50 hover:border-teal-300 hover:text-teal-700 transition-colors cursor-pointer;
+}
+.symptom-chip.selected {
+    @apply bg-teal-100 border-teal-500 text-teal-800;
+}
+.slider::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 bg-teal-600 rounded-full cursor-pointer;
+}
+</style>
+
+<script>
+let selectedSymptoms = new Set();
+let currentStep = 1;
+
+// Symptom chip selection
+document.addEventListener('DOMContentLoaded', function() {
+    const symptomChips = document.querySelectorAll('.symptom-chip');
+    const nextStep1Btn = document.getElementById('next-step1');
+    const severitySlider = document.getElementById('severity');
+    const severityDisplay = document.getElementById('severity-display');
+    
+    // Handle symptom chip clicks
+    symptomChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            const symptom = this.dataset.symptom;
+            
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                selectedSymptoms.delete(symptom);
+            } else {
+                this.classList.add('selected');
+                selectedSymptoms.add(symptom);
+            }
+            
+            // Enable next button if symptoms selected
+            nextStep1Btn.disabled = selectedSymptoms.size === 0;
+        });
+    });
+    
+    // Step navigation
+    document.getElementById('next-step1').addEventListener('click', function() {
+        showStep(2);
+    });
+    
+    document.getElementById('back-step2').addEventListener('click', function() {
+        showStep(1);
+    });
+    
+    // Severity slider
+    severitySlider.addEventListener('input', function() {
+        severityDisplay.textContent = this.value;
+    });
+    
+    // Analyze symptoms
+    document.getElementById('analyze-symptoms').addEventListener('click', analyzeSymptoms);
+});
+
+function showStep(step) {
+    // Hide all steps
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.add('hidden');
+    
+    // Update progress indicators
+    updateStepIndicators(step);
+    
+    // Show current step
+    if (step === 1) {
+        document.getElementById('step1').classList.remove('hidden');
+        currentStep = 1;
+    } else if (step === 2) {
+        document.getElementById('step2').classList.remove('hidden');
+        currentStep = 2;
+    }
+}
+
+function updateStepIndicators(activeStep) {
+    const indicators = [
+        { id: 'step1-indicator', label: document.querySelector('#step1-indicator').nextElementSibling },
+        { id: 'step2-indicator', label: document.querySelector('#step2-indicator').nextElementSibling },
+        { id: 'step3-indicator', label: document.querySelector('#step3-indicator').nextElementSibling }
+    ];
+    
+    indicators.forEach((indicator, index) => {
+        const stepNum = index + 1;
+        const element = document.getElementById(indicator.id);
+        
+        if (stepNum <= activeStep) {
+            element.className = 'w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-medium';
+            indicator.label.className = 'ml-2 text-sm font-medium text-teal-600';
+        } else {
+            element.className = 'w-8 h-8 bg-cool-gray-300 text-cool-gray-600 rounded-full flex items-center justify-center text-sm font-medium';
+            indicator.label.className = 'ml-2 text-sm font-medium text-cool-gray-600';
+        }
+    });
+}
+
+async function analyzeSymptoms() {
+    const analyzeBtn = document.getElementById('analyze-symptoms');
+    const analyzeText = analyzeBtn.querySelector('.analyze-text');
+    const loadingText = analyzeBtn.querySelector('.loading-text');
+    const resultsSection = document.getElementById('results-section');
+    
+    // Show loading state
+    analyzeBtn.disabled = true;
+    analyzeText.classList.add('hidden');
+    loadingText.classList.remove('hidden');
+    
+    // Get form data
+    const formData = {
+        symptoms: Array.from(selectedSymptoms),
+        additional_symptoms: document.getElementById('additional-symptoms').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        duration: document.querySelector('input[name="duration"]:checked')?.value,
+        severity: document.getElementById('severity').value
+    };
+    
+    try {
+        // Simulate API call with mock data
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        const mockResult = generateMockResult(formData);
+        displayResults(mockResult);
+        
+        // Show results step
+        updateStepIndicators(3);
+        document.getElementById('step2').classList.add('hidden');
+        resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+        
+    } catch (error) {
+        alert('Error analyzing symptoms: ' + error.message);
+    } finally {
+        // Reset button state
+        analyzeBtn.disabled = false;
+        analyzeText.classList.remove('hidden');
+        loadingText.classList.add('hidden');
+    }
+}
+
+function generateMockResult(formData) {
+    const severity = parseInt(formData.severity);
+    const hasHighRiskSymptoms = formData.symptoms.some(s => 
+        ['chest_pain', 'shortness_breath'].includes(s)
+    );
+    
+    let riskLevel = 'low';
+    if (hasHighRiskSymptoms || severity >= 8) {
+        riskLevel = 'high';
+    } else if (severity >= 5 || formData.symptoms.length >= 3) {
+        riskLevel = 'medium';
+    }
+    
+    return {
+        risk_level: riskLevel,
+        possible_conditions: [
+            {
+                name: 'Common Cold',
+                description: 'Viral infection affecting the upper respiratory system',
+                confidence: 0.75
+            },
+            {
+                name: 'Tension Headache',
+                description: 'Most common type of headache, often stress-related',
+                confidence: 0.60
+            }
+        ],
+        recommendations: [
+            'Get adequate rest and sleep',
+            'Stay hydrated with plenty of fluids',
+            'Monitor symptoms for changes',
+            'Consider over-the-counter pain relief if needed'
+        ],
+        next_steps: [
+            'Continue monitoring your symptoms',
+            'Schedule appointment if symptoms worsen',
+            'Seek immediate care if experiencing severe symptoms'
+        ]
+    };
+}
+
+function displayResults(result) {
+    // Display risk level
+    const riskLevel = document.getElementById('risk-level');
+    const riskColor = getRiskColor(result.risk_level);
+    riskLevel.innerHTML = `
+        <div class="flex items-center space-x-3">
+            <div class="w-4 h-4 rounded-full ${riskColor.bg}"></div>
+            <span class="text-lg font-semibold ${riskColor.text}">Risk Level: ${result.risk_level.toUpperCase()}</span>
+        </div>
+    `;
+    
+    // Display possible conditions
+    const conditionsList = document.getElementById('conditions-list');
+    if (result.possible_conditions && result.possible_conditions.length > 0) {
+        conditionsList.innerHTML = result.possible_conditions.map(condition => `
+            <div class="bg-cool-gray-50 rounded-lg p-4 mb-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-semibold text-cool-gray-900">${condition.name}</h4>
+                        <p class="text-cool-gray-600 text-sm mt-1">${condition.description}</p>
+                    </div>
+                    <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded-full text-xs font-medium">
+                        ${Math.round(condition.confidence * 100)}% match
+                    </span>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        conditionsList.innerHTML = '<p class="text-cool-gray-600">No specific conditions identified.</p>';
+    }
+    
+    // Display recommendations
+    const recommendationsList = document.getElementById('recommendations-list');
+    if (result.recommendations && result.recommendations.length > 0) {
+        recommendationsList.innerHTML = result.recommendations.map(rec => `
+            <div class="flex items-start space-x-3 mb-3">
+                <svg class="w-5 h-5 text-teal-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="text-cool-gray-700">${rec}</span>
+            </div>
+        `).join('');
+    } else {
+        recommendationsList.innerHTML = '<p class="text-cool-gray-600">No specific recommendations available.</p>';
+    }
+    
+    // Display next steps
+    const nextStepsList = document.getElementById('next-steps-list');
+    if (result.next_steps && result.next_steps.length > 0) {
+        nextStepsList.innerHTML = result.next_steps.map((step, index) => `
+            <div class="flex items-start space-x-3 mb-3">
+                <div class="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                    ${index + 1}
+                </div>
+                <span class="text-teal-800">${step}</span>
+            </div>
+        `).join('');
+    } else {
+        nextStepsList.innerHTML = '<p class="text-teal-800">Monitor symptoms and consult healthcare provider if concerned.</p>';
+    }
+}
+
+function getRiskColor(riskLevel) {
+    switch (riskLevel.toLowerCase()) {
+        case 'low':
+            return { bg: 'bg-green-400', text: 'text-green-700' };
+        case 'medium':
+            return { bg: 'bg-yellow-400', text: 'text-yellow-700' };
+        case 'high':
+            return { bg: 'bg-orange-400', text: 'text-orange-700' };
+        case 'urgent':
+            return { bg: 'bg-red-400', text: 'text-red-700' };
+        default:
+            return { bg: 'bg-cool-gray-400', text: 'text-cool-gray-700' };
+    }
+}
+</script>
+{% endblock %}

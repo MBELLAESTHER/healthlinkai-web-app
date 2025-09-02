@@ -1,0 +1,187 @@
+{
+  "symptom_rules": [
+    {
+      "symptoms": ["fever", "chills"],
+      "conditions": [
+        {
+          "name": "Malaria",
+          "probability": 0.7,
+          "risk_score": 75,
+          "duration_modifier": {
+            ">3 days": 85
+          }
+        },
+        {
+          "name": "Bacterial infection",
+          "probability": 0.8,
+          "risk_score": 70,
+          "duration_modifier": {
+            ">3 days": 80
+          }
+        }
+      ],
+      "base_risk": "medium-high"
+    },
+    {
+      "symptoms": ["headache", "sensitivity to light"],
+      "conditions": [
+        {
+          "name": "Migraine",
+          "probability": 0.85,
+          "risk_score": 40
+        },
+        {
+          "name": "Tension headache",
+          "probability": 0.6,
+          "risk_score": 25
+        }
+      ],
+      "base_risk": "low-medium"
+    },
+    {
+      "symptoms": ["cough", "fever", "shortness of breath"],
+      "conditions": [
+        {
+          "name": "Pneumonia",
+          "probability": 0.8,
+          "risk_score": 85
+        },
+        {
+          "name": "Bronchitis",
+          "probability": 0.7,
+          "risk_score": 60
+        }
+      ],
+      "base_risk": "high"
+    },
+    {
+      "symptoms": ["diarrhea", "dehydration"],
+      "conditions": [
+        {
+          "name": "Gastroenteritis",
+          "probability": 0.9,
+          "risk_score": 60
+        },
+        {
+          "name": "Food poisoning",
+          "probability": 0.7,
+          "risk_score": 55
+        }
+      ],
+      "base_risk": "medium"
+    },
+    {
+      "symptoms": ["sore throat", "runny nose"],
+      "conditions": [
+        {
+          "name": "Common cold",
+          "probability": 0.9,
+          "risk_score": 15
+        },
+        {
+          "name": "Viral upper respiratory infection",
+          "probability": 0.8,
+          "risk_score": 20
+        }
+      ],
+      "base_risk": "low"
+    },
+    {
+      "symptoms": ["chest pain", "arm pain"],
+      "conditions": [
+        {
+          "name": "Possible cardiac event",
+          "probability": 0.7,
+          "risk_score": 95
+        },
+        {
+          "name": "Angina",
+          "probability": 0.6,
+          "risk_score": 85
+        }
+      ],
+      "base_risk": "emergency"
+    }
+  ],
+  "red_flag_terms": [
+    {
+      "terms": ["severe chest pain", "crushing chest pain"],
+      "condition": "Cardiac emergency",
+      "risk_score": 100,
+      "emergency": true
+    },
+    {
+      "terms": ["fainting", "loss of consciousness", "passed out"],
+      "condition": "Syncope/Neurological emergency",
+      "risk_score": 95,
+      "emergency": true
+    },
+    {
+      "terms": ["severe bleeding", "heavy bleeding", "blood loss"],
+      "condition": "Hemorrhage",
+      "risk_score": 100,
+      "emergency": true
+    },
+    {
+      "terms": ["difficulty breathing", "can't breathe", "gasping"],
+      "condition": "Respiratory emergency",
+      "risk_score": 95,
+      "emergency": true
+    },
+    {
+      "terms": ["severe abdominal pain", "excruciating pain"],
+      "condition": "Acute abdomen",
+      "risk_score": 90,
+      "emergency": true
+    },
+    {
+      "terms": ["sudden severe headache", "worst headache ever"],
+      "condition": "Possible intracranial emergency",
+      "risk_score": 95,
+      "emergency": true
+    }
+  ],
+  "keyword_mappings": {
+    "fever": ["fever", "high temperature", "hot", "burning up", "feverish"],
+    "chills": ["chills", "shivering", "cold sweats", "shaking"],
+    "headache": ["headache", "head pain", "migraine", "head hurts"],
+    "sensitivity to light": ["light sensitivity", "photophobia", "bright lights hurt", "light bothers me"],
+    "cough": ["cough", "coughing", "hacking", "persistent cough"],
+    "shortness of breath": ["shortness of breath", "breathless", "winded", "hard to breathe"],
+    "diarrhea": ["diarrhea", "loose stools", "watery stools", "frequent bowel movements"],
+    "dehydration": ["dehydration", "dry mouth", "thirsty", "dizzy", "weak"],
+    "sore throat": ["sore throat", "throat pain", "scratchy throat", "throat hurts"],
+    "runny nose": ["runny nose", "nasal congestion", "stuffy nose", "sniffles"],
+    "chest pain": ["chest pain", "chest pressure", "chest tightness", "heart pain"],
+    "arm pain": ["arm pain", "left arm pain", "radiating pain", "pain down arm"]
+  },
+  "risk_bands": {
+    "low": {
+      "range": [0, 30],
+      "message": "Low risk - Monitor symptoms and consider self-care",
+      "actions": ["Rest", "Stay hydrated", "Over-the-counter medications if needed"]
+    },
+    "medium": {
+      "range": [31, 60],
+      "message": "Medium risk - Consider consulting a healthcare provider",
+      "actions": ["Schedule appointment with doctor", "Monitor symptoms closely", "Seek care if worsening"]
+    },
+    "high": {
+      "range": [61, 89],
+      "message": "High risk - Seek medical attention promptly",
+      "actions": ["Contact doctor immediately", "Visit urgent care", "Do not delay treatment"]
+    },
+    "emergency": {
+      "range": [90, 100],
+      "message": "EMERGENCY - Seek immediate medical attention",
+      "actions": ["Call emergency services (911)", "Go to emergency room immediately", "Do not drive yourself"]
+    }
+  },
+  "disclaimers": [
+    "⚠️ IMPORTANT: This tool provides educational information only and is NOT a substitute for professional medical advice, diagnosis, or treatment.",
+    "Always consult with a qualified healthcare professional for proper medical evaluation.",
+    "In case of emergency or life-threatening symptoms, call emergency services (911) immediately.",
+    "This assessment is based on general medical knowledge and cannot account for your individual medical history or circumstances.",
+    "Do not delay seeking professional medical care based on this assessment."
+  ]
+}

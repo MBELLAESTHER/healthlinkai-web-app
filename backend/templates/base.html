@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HealthLinkAI{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cool-gray': {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827'
+                        },
+                        'teal': {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cool-gray-50 min-h-screen">
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-cool-gray-900 text-white p-4 z-50 transform translate-y-full transition-transform duration-300" role="banner" aria-label="Cookie consent">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="text-sm">
+                    We use cookies to improve your experience and analyze site usage. 
+                    <a href="#" class="text-teal-400 hover:text-teal-300 underline">Learn more</a>
+                </p>
+            </div>
+            <div class="flex space-x-3">
+                <button id="cookie-decline" class="px-4 py-2 text-sm text-cool-gray-300 hover:text-white transition-colors" aria-label="Decline cookies">
+                    Decline
+                </button>
+                <button id="cookie-accept" class="px-4 py-2 bg-teal-600 text-white text-sm rounded-lg hover:bg-teal-700 transition-colors" aria-label="Accept cookies">
+                    Accept
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg border-b border-cool-gray-200" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-2" aria-label="HealthLinkAI Home">
+                        <!-- Health Icon -->
+                        <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span class="text-xl font-bold text-cool-gray-900">HealthLinkAI</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ url_for('index') }}" class="text-cool-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-current="{% if request.endpoint == 'index' %}page{% endif %}">Home</a>
+                    <a href="{{ url_for('symptoms') }}" class="text-cool-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Symptom Checker</a>
+                    <a href="{{ url_for('mindwell') }}" class="text-cool-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">MindWell</a>
+                    <a href="{{ url_for('providers') }}" class="text-cool-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Providers</a>
+                    <a href="{{ url_for('dashboard') }}" class="text-cool-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Dashboard</a>
+                    <button class="bg-gradient-to-r from-teal-600 to-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-teal-700 hover:to-teal-800 transition-all shadow-md" aria-label="Upgrade to Premium">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                        Get Premium
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" class="mobile-menu-button text-cool-gray-700 hover:text-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 p-2 rounded-md" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden" role="menu" aria-label="Mobile navigation menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-cool-gray-200">
+                <a href="{{ url_for('index') }}" class="block px-3 py-2 text-cool-gray-700 hover:text-teal-600 rounded-md text-base font-medium" role="menuitem">Home</a>
+                <a href="{{ url_for('symptoms') }}" class="block px-3 py-2 text-cool-gray-700 hover:text-teal-600 rounded-md text-base font-medium" role="menuitem">Symptom Checker</a>
+                <a href="{{ url_for('mindwell') }}" class="block px-3 py-2 text-cool-gray-700 hover:text-teal-600 rounded-md text-base font-medium" role="menuitem">MindWell</a>
+                <a href="{{ url_for('providers') }}" class="block px-3 py-2 text-cool-gray-700 hover:text-teal-600 rounded-md text-base font-medium" role="menuitem">Providers</a>
+                <a href="{{ url_for('dashboard') }}" class="block px-3 py-2 text-cool-gray-700 hover:text-teal-600 rounded-md text-base font-medium" role="menuitem">Dashboard</a>
+                <button class="block w-full text-left px-3 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-md text-base font-medium mt-2" role="menuitem">Get Premium</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer with Medical Disclaimer -->
+    <footer class="bg-cool-gray-800 text-white mt-16" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Medical Disclaimer - Prominent -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 rounded-r-lg" role="alert" aria-labelledby="medical-disclaimer">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-800 font-medium" id="medical-disclaimer">
+                            <strong>Medical Disclaimer:</strong> This tool provides educational information, not medical diagnosis. In emergencies call local services immediately.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span class="text-xl font-bold">HealthLinkAI</span>
+                    </div>
+                    <p class="text-cool-gray-300 text-sm leading-relaxed">
+                        Empowering your health journey with AI-powered symptom checking, mental health support, and healthcare provider connections.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-cool-gray-200 uppercase tracking-wider mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('symptoms') }}" class="text-cool-gray-300 hover:text-teal-400 text-sm transition-colors">Symptom Checker</a></li>
+                        <li><a href="{{ url_for('mindwell') }}" class="text-cool-gray-300 hover:text-teal-400 text-sm transition-colors">Mental Health Support</a></li>
+                        <li><a href="{{ url_for('providers') }}" class="text-cool-gray-300 hover:text-teal-400 text-sm transition-colors">Find Providers</a></li>
+                        <li><a href="{{ url_for('dashboard') }}" class="text-cool-gray-300 hover:text-teal-400 text-sm transition-colors">Health Dashboard</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-cool-gray-200 uppercase tracking-wider mb-4">Emergency</h3>
+                    <ul class="space-y-2">
+                        <li class="text-cool-gray-300 text-sm">Emergency: <a href="tel:911" class="text-red-400 font-semibold hover:text-red-300">911</a></li>
+                        <li class="text-cool-gray-300 text-sm">Suicide Prevention: <a href="tel:988" class="text-teal-400 font-semibold hover:text-teal-300">988</a></li>
+                        <li class="text-cool-gray-300 text-sm">Crisis Text: <a href="sms:741741" class="text-teal-400 font-semibold hover:text-teal-300">741741</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-cool-gray-700">
+                <p class="text-center text-cool-gray-400 text-sm">
+                    © 2024 HealthLinkAI. All rights reserved. | 
+                    <a href="#" class="hover:text-teal-400 transition-colors">Privacy Policy</a> | 
+                    <a href="#" class="hover:text-teal-400 transition-colors">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', function() {
+            const isExpanded = mobileMenu.classList.contains('hidden');
+            mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        });
+
+        // Cookie banner functionality
+        const cookieBanner = document.getElementById('cookie-banner');
+        const cookieAccept = document.getElementById('cookie-accept');
+        const cookieDecline = document.getElementById('cookie-decline');
+
+        // Show cookie banner if no preference is set
+        if (!localStorage.getItem('cookieConsent')) {
+            setTimeout(() => {
+                cookieBanner.classList.remove('translate-y-full');
+            }, 1000);
+        }
+
+        cookieAccept.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            cookieBanner.classList.add('translate-y-full');
+            // Initialize analytics here if needed
+            console.log('Analytics cookies accepted');
+        });
+
+        cookieDecline.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'declined');
+            cookieBanner.classList.add('translate-y-full');
+            console.log('Analytics cookies declined');
+        });
+    </script>
+    
+    <!-- Premium Modal Script -->
+    <script src="{{ url_for('static', filename='js/premium-modal.js') }}"></script>
+    
+    <!-- Premium modal trigger -->
+    {% if show_upgrade_modal %}
+    <script>
+        window.showUpgradeModal = true;
+        window.upgradeMessage = "{{ usage_error.message if usage_error else 'Upgrade to Premium for unlimited access!' }}";
+    </script>
+    {% endif %}
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

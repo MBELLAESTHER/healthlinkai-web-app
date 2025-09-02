@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}MindWell Chat - HealthLinkAI{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-cool-gray-900 mb-4">
+            MindWell AI Companion
+        </h1>
+        <p class="text-xl text-cool-gray-600 max-w-2xl mx-auto">
+            Your compassionate AI companion for mental health support and emotional wellness.
+        </p>
+    </div>
+
+    <!-- Chat Interface -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <!-- Chat Header -->
+        <div class="bg-gradient-to-r from-purple-600 to-teal-600 px-6 py-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold">MindWell Assistant</h3>
+                    <p class="text-purple-100 text-sm">Always here to listen and support</p>
+                </div>
+                <div class="ml-auto">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                        <span class="text-white text-sm">Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-4 bg-cool-gray-50">
+            <!-- Welcome Message -->
+            <div class="flex items-start space-x-3">
+                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 max-w-xs md:max-w-md shadow-sm">
+                    <p class="text-cool-gray-800">Hello! I'm your MindWell assistant. I'm here to provide support, listen to your concerns, and help you develop coping strategies. How are you feeling today?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="border-t border-cool-gray-200 p-4">
+            <form id="chat-form" class="flex space-x-3">
+                <input type="text" id="message-input" placeholder="Share your thoughts and feelings..."
+                       class="flex-1 px-4 py-3 border border-cool-gray-300 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                <button type="submit" id="send-btn"
+                        class="bg-purple-600 text-white px-6 py-3 rounded-2xl font-medium hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span class="send-text">Send</span>
+                    <span class="loading-text hidden">...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button class="quick-action bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl p-4 text-left transition-colors"
+                data-message="I'm feeling anxious and overwhelmed">
+            <div class="flex items-center space-x-3">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div>
+                    <h4 class="font-semibold text-blue-800">Feeling Anxious</h4>
+                    <p class="text-blue-600 text-sm">Get help with anxiety</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="quick-action bg-green-50 hover:bg-green-100 border border-green-200 rounded-xl p-4 text-left transition-colors"
+                data-message="I'm feeling sad and down lately">
+            <div class="flex items-center space-x-3">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                <div>
+                    <h4 class="font-semibold text-green-800">Feeling Down</h4>
+                    <p class="text-green-600 text-sm">Support for low mood</p>
+                </div>
+            </div>
+        </button>
+
+        <button class="quick-action bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-xl p-4 text-left transition-colors"
+                data-message="I'm dealing with a lot of stress right now">
+            <div class="flex items-center space-x-3">
+                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <h4 class="font-semibold text-orange-800">Feeling Stressed</h4>
+                    <p class="text-orange-600 text-sm">Stress management help</p>
+                </div>
+            </div>
+        </button>
+    </div>
+
+    <!-- Crisis Resources -->
+    <div class="mt-8 bg-red-50 border-l-4 border-red-400 p-6 rounded-r-xl">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-lg font-medium text-red-800 mb-2">Crisis Support Resources</h3>
+                <div class="text-sm text-red-700 space-y-2">
+                    <p><strong>National Suicide Prevention Lifeline:</strong> <a href="tel:988" class="underline font-semibold">988</a> (24/7)</p>
+                    <p><strong>Crisis Text Line:</strong> Text HOME to <a href="sms:741741" class="underline font-semibold">741741</a></p>
+                    <p><strong>Emergency Services:</strong> <a href="tel:911" class="underline font-semibold">911</a></p>
+                    <p class="mt-3 text-red-600">If you're having thoughts of self-harm or suicide, please reach out for immediate help.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+document.getElementById('chat-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const messageInput = document.getElementById('message-input');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessage(message, 'user');
+    messageInput.value = '';
+    
+    // Show loading state
+    const sendBtn = document.getElementById('send-btn');
+    const sendText = sendBtn.querySelector('.send-text');
+    const loadingText = sendBtn.querySelector('.loading-text');
+    
+    sendBtn.disabled = true;
+    sendText.classList.add('hidden');
+    loadingText.classList.remove('hidden');
+    
+    try {
+        const response = await fetch('/api/mindwell-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                session_id: sessionId
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            addMessage(result.response, 'assistant');
+        } else {
+            throw new Error(result.error || 'Failed to get response');
+        }
+    } catch (error) {
+        addMessage('I apologize, but I\'m having trouble responding right now. Please try again or contact a healthcare professional if you need immediate support.', 'assistant', true);
+    } finally {
+        // Reset button state
+        sendBtn.disabled = false;
+        sendText.classList.remove('hidden');
+        loadingText.classList.add('hidden');
+    }
+});
+
+// Quick action buttons
+document.querySelectorAll('.quick-action').forEach(button => {
+    button.addEventListener('click', function() {
+        const message = this.dataset.message;
+        document.getElementById('message-input').value = message;
+        document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+    });
+});
+
+function addMessage(message, sender, isError = false) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageDiv = document.createElement('div');
+    
+    if (sender === 'user') {
+        messageDiv.className = 'flex items-start space-x-3 justify-end';
+        messageDiv.innerHTML = `
+            <div class="bg-purple-600 text-white rounded-2xl rounded-tr-md px-4 py-3 max-w-xs md:max-w-md shadow-sm">
+                <p>${escapeHtml(message)}</p>
+            </div>
+            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+        `;
+    } else {
+        messageDiv.className = 'flex items-start space-x-3';
+        const bgColor = isError ? 'bg-red-50 border border-red-200' : 'bg-white';
+        const textColor = isError ? 'text-red-800' : 'text-cool-gray-800';
+        
+        messageDiv.innerHTML = `
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+            </div>
+            <div class="${bgColor} rounded-2xl rounded-tl-md px-4 py-3 max-w-xs md:max-w-md shadow-sm">
+                <p class="${textColor}">${escapeHtml(message)}</p>
+            </div>
+        `;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Auto-focus message input
+document.getElementById('message-input').focus();
+</script>
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}HealthLinkAI | AI-Powered Health Support{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-teal-700 to-teal-800 text-white py-20" role="banner">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                Your Health, <span class="text-teal-200">AI-Powered</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-teal-100 mb-8 max-w-3xl mx-auto">
+                Get instant symptom analysis, mental health support, and connect with healthcare providers near you.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('symptoms') }}" class="bg-white text-teal-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-50 transition-colors shadow-lg" aria-label="Start symptom checker">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Check Symptoms
+                </a>
+                <a href="{{ url_for('mindwell') }}" class="bg-teal-800 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-900 transition-colors border-2 border-teal-600" aria-label="Start MindWell chat">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    Talk to MindWell
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-cool-gray-900 mb-4">
+                Comprehensive Health Support
+            </h2>
+            <p class="text-xl text-cool-gray-600 max-w-2xl mx-auto">
+                Our AI-powered platform provides personalized health insights and connects you with the care you need.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1: AI Symptom Checker -->
+            <article class="bg-cool-gray-50 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow">
+                <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6" aria-hidden="true">
+                    <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-cool-gray-900 mb-4">AI Symptom Triage</h3>
+                <p class="text-cool-gray-600 mb-6">
+                    Get instant analysis of your symptoms with our advanced AI system. Understand potential conditions and urgency levels.
+                </p>
+                <a href="{{ url_for('symptoms') }}" class="text-teal-600 font-semibold hover:text-teal-700 transition-colors" aria-label="Start symptom assessment">
+                    Start Assessment →
+                </a>
+            </article>
+
+            <!-- Feature 2: Mental Health Support -->
+            <article class="bg-cool-gray-50 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow">
+                <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6" aria-hidden="true">
+                    <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-cool-gray-900 mb-4">Mental Health Support</h3>
+                <p class="text-cool-gray-600 mb-6">
+                    Chat with MindWell, our compassionate AI companion designed to provide emotional support and mental health resources.
+                </p>
+                <a href="{{ url_for('mindwell') }}" class="text-teal-600 font-semibold hover:text-teal-700 transition-colors" aria-label="Start MindWell chat">
+                    Chat Now →
+                </a>
+            </article>
+
+            <!-- Feature 3: Provider Network -->
+            <article class="bg-cool-gray-50 rounded-2xl p-8 text-center hover:shadow-lg transition-shadow">
+                <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6" aria-hidden="true">
+                    <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-cool-gray-900 mb-4">Nearby Providers</h3>
+                <p class="text-cool-gray-600 mb-6">
+                    Find qualified healthcare providers in your area. From general practitioners to specialists, we'll help you connect.
+                </p>
+                <a href="{{ url_for('providers') }}" class="text-teal-600 font-semibold hover:text-teal-700 transition-colors" aria-label="Find healthcare providers">
+                    Find Providers →
+                </a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<div class="bg-cool-gray-100 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold text-teal-600 mb-2">10K+</div>
+                <div class="text-cool-gray-600">Symptoms Analyzed</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-teal-600 mb-2">5K+</div>
+                <div class="text-cool-gray-600">Mental Health Sessions</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-teal-600 mb-2">500+</div>
+                <div class="text-cool-gray-600">Healthcare Providers</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-teal-600 mb-2">24/7</div>
+                <div class="text-cool-gray-600">AI Support Available</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-cool-gray-900 mb-4">
+            Ready to Take Control of Your Health?
+        </h2>
+        <p class="text-xl text-cool-gray-600 mb-8 max-w-2xl mx-auto">
+            Start your health journey today with our comprehensive AI-powered platform.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ url_for('dashboard') }}" class="bg-teal-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-teal-700 transition-colors shadow-lg">
+                View Dashboard
+            </a>
+            <a href="{{ url_for('symptoms') }}" class="bg-cool-gray-200 text-cool-gray-800 px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-cool-gray-300 transition-colors">
+                Start Health Check
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
