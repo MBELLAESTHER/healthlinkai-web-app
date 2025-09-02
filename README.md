@@ -1,5 +1,9 @@
 # HealthLinkAI - MindWell
 
+##pitch deck link [ https://www.canva.com/design/DAGx0cn4Jzs/oi3GMA8_P-EeI5GpS0Wbrw/edit?utm_content=DAGx0cn4Jzs&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton ]
+demo video [ https://drive.google.com/file/d/1bW0t37c6mDQHvovh5SAjLlkV2DYMvJa9/view?usp=drive_link ]
+
+
 A comprehensive AI-powered health platform that provides symptom checking, mental health support, and healthcare provider connections.
 
 ## Features
