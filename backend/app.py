@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from datetime import datetime
 import os
 from functools import wraps
 from werkzeug.security import check_password_hash
 import base64
+import pymysql
+
+# Use PyMySQL as MySQL driver
+pymysql.install_as_MySQLdb()
 
 # Import AI modules
 from ai.symptom_checker import SymptomChecker
@@ -68,22 +73,19 @@ def symptoms():
         analysis = checker.analyze_symptoms(symptom_text, selected_symptoms)
         
         # Save to database (mock user for now)
-        symptom_report = SymptomReport(
+        symptom_log = SymptomLog(
             user_id=1,  # Mock user ID
-            symptoms_text=symptom_text,
-            selected_symptoms=','.join(selected_symptoms),
-            risk_level=analysis['risk_band'],
-            conditions=','.join([c['name'] for c in analysis['conditions']]),
-            advice=analysis['advice'],
+            symptoms=symptom_text,
+            analysis=str(analysis),
             created_at=datetime.utcnow()
         )
         
         try:
-            db.session.add(symptom_report)
+            db.session.add(symptom_log)
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            print(f"Error saving symptom report: {e}")
+            print(f"Error saving symptom log: {e}")
         
         return render_template('symptom_checker.html', analysis=analysis, show_results=True)
     
@@ -93,48 +95,47 @@ def symptoms():
 def mindwell():
     return render_template('mindwell.html')
 
-@app.route('/api/mindwell', methods=['POST'])
+@app.route('/api/mindwell-chat', methods=['POST'])
 def api_mindwell():
-    data = request.get_json()
-    user_message = data.get('message', '')
-    
-    if not user_message:
-        return jsonify({'error': 'Message is required'}), 400
-    
-    # Check usage limits for free users
-    user_id = 1  # Mock user ID for now
-    usage_check = require_usage_limit(user_id, 'mindwell_chat')
-    
-    if 'error' in usage_check:
-        return jsonify({
-            'error': 'Usage limit exceeded',
-            'message': usage_check['message'],
-            'upgrade_required': True,
-            'current_plan': usage_check['current_plan']
-        }), 429
-    
-    # Get AI response
-    response = mindwell_reply(user_message)
-    
-    # Save session to database (mock user for now)
-    session_record = MentalHealthSession(
-        user_id=1,  # Mock user ID
-        user_message=user_message,
-        bot_response=response['response'],
-        sentiment_score=response.get('sentiment_score', 0),
-        detected_intent=response.get('intent', 'general'),
-        alert_flag=response.get('alert_flag', False),
-        created_at=datetime.utcnow()
-    )
+    print("=== MindWell API called ===")
     
     try:
-        db.session.add(session_record)
-        db.session.commit()
+        data = request.get_json()
+        user_message = data.get('message', '')
+        print(f"Received message: {user_message}")
+        
+        if not user_message:
+            return jsonify({'error': 'Message is required'}), 400
+        
+        # Skip usage limits for now since we don't have a real user system
+        # TODO: Re-enable when proper user authentication is implemented
+        print("Skipping usage limits (no user auth yet)...")
+        
+        # Get AI response
+        print("Calling mindwell_reply...")
+        response = mindwell_reply(user_message)
+        print(f"MindWell response received: {response}")
+        
     except Exception as e:
-        db.session.rollback()
-        print(f"Error saving mental health session: {e}")
+        import traceback
+        print(f"CRITICAL ERROR in api_mindwell: {e}")
+        print(f"Full traceback: {traceback.format_exc()}")
+        return jsonify({
+            'error': 'I apologize, but I\'m having trouble responding right now. Please try again or contact a healthcare professional if you need immediate support.',
+            'response': 'I apologize, but I\'m having trouble responding right now. Please try again or contact a healthcare professional if you need immediate support.'
+        }), 500
     
-    return jsonify(response)
+    # Skip database saving for now since we don't have a real user system
+    # TODO: Re-enable when proper user authentication is implemented
+    print("Skipping database save (no user auth yet)...")
+    
+    return jsonify({
+        'response': response['response'],
+        'sentiment': response.get('sentiment', {}),
+        'intents_detected': response.get('intents_detected', []),
+        'guided_exercises': response.get('guided_exercises', []),
+        'resources': response.get('resources', [])
+    })
 
 @app.route('/providers')
 def providers():
@@ -193,16 +194,16 @@ def dashboard():
     # Mock user ID for now
     user_id = 1
     
-    # Get recent symptom reports
-    recent_symptoms = SymptomReport.query.filter_by(user_id=user_id)\
-        .order_by(SymptomReport.created_at.desc()).limit(5).all()
+    # Get recent symptom reports (using SymptomLog model)
+    recent_symptoms = SymptomLog.query.filter_by(user_id=user_id)\
+        .order_by(SymptomLog.created_at.desc()).limit(5).all()
     
-    # Get recent mental health sessions with alerts
-    recent_sessions = MentalHealthSession.query.filter_by(user_id=user_id)\
-        .order_by(MentalHealthSession.created_at.desc()).limit(5).all()
+    # Get recent mental health sessions (using Message model)
+    recent_sessions = Message.query.filter_by(user_id=user_id)\
+        .order_by(Message.created_at.desc()).limit(5).all()
     
     # Count alerts
-    alert_count = MentalHealthSession.query.filter_by(user_id=user_id, alert_flag=True).count()
+    alert_count = Message.query.filter_by(user_id=user_id, alert_flag=True).count()
     
     # Mock subscription status
     subscription = {
@@ -296,19 +297,16 @@ def admin_required(f):
 @app.route('/admin')
 @admin_required
 def admin():
-    # Get all alerts and sessions for admin review
-    alerts = MentalHealthSession.query.filter_by(alert_flag=True)\
-        .order_by(MentalHealthSession.created_at.desc()).all()
+    # Get all alerts and sessions for admin review (using Message model)
+    alerts = Message.query.filter_by(alert_flag=True)\
+        .order_by(Message.created_at.desc()).all()
     
-    # Get high-risk symptom reports
-    high_risk_symptoms = SymptomReport.query.filter(
-        SymptomReport.risk_level.in_(['high', 'critical'])
-    ).order_by(SymptomReport.created_at.desc()).all()
+    # Get recent symptom reports (using SymptomLog model)
+    high_risk_symptoms = SymptomLog.query\
+        .order_by(SymptomLog.created_at.desc()).limit(10).all()
     
-    # Get recent appointments
-    recent_appointments = Appointment.query.order_by(
-        Appointment.created_at.desc()
-    ).limit(20).all()
+    # Mock recent appointments (no Appointment model exists)
+    recent_appointments = []
     
     return render_template('admin.html',
                          alerts=alerts,
@@ -318,7 +316,7 @@ def admin():
 @app.route('/admin/mark_handled/<int:session_id>', methods=['POST'])
 @admin_required
 def mark_handled(session_id):
-    session_record = MentalHealthSession.query.get_or_404(session_id)
+    session_record = Message.query.get_or_404(session_id)
     session_record.alert_flag = False
     
     try:

@@ -13,6 +13,9 @@ except ImportError:
     print("NLTK not installed. Please install with: pip install nltk")
     raise
 
+# Simple randomization for dynamic responses
+import random
+
 # Download VADER lexicon if not present
 try:
     nltk.data.find('vader_lexicon')
@@ -28,6 +31,92 @@ class MindWellBot:
         self.guided_exercises = self._load_guided_exercises()
         self.crisis_terms = self._load_crisis_terms()
         self.empathetic_responses = self._load_empathetic_responses()
+        
+        # Initialize enhanced response system
+        self.enhanced_responses = self._load_enhanced_responses()
+        self.context_modifiers = self._load_context_modifiers()
+        self.conversation_starters = self._load_conversation_starters()
+    
+    def _load_enhanced_responses(self) -> Dict[str, List[str]]:
+        """Load multiple response variations for each intent"""
+        return {
+            "stress": [
+                "It sounds like you're carrying a heavy load right now. That overwhelming feeling is completely understandable.",
+                "I can hear the pressure you're experiencing. Stress can feel so consuming sometimes.",
+                "You're dealing with a lot, and it makes perfect sense that you'd feel overwhelmed.",
+                "That sounds incredibly challenging. When we're stressed, everything can feel more difficult.",
+                "I recognize how much you're juggling right now. Stress has a way of making everything feel urgent."
+            ],
+            "anxiety": [
+                "Anxiety can feel so overwhelming and frightening. Thank you for sharing this with me.",
+                "Those worried feelings are really difficult to sit with. You're being brave by reaching out.",
+                "I can sense the anxiety you're experiencing. It can make everything feel so much more intense.",
+                "Anxious thoughts can be exhausting. It takes courage to talk about what you're going through.",
+                "That nervous energy you're describing sounds really uncomfortable. Anxiety affects us in so many ways."
+            ],
+            "sleep": [
+                "Sleep troubles can make everything in life feel so much harder. I'm sorry you're struggling with this.",
+                "Not being able to rest properly is exhausting on every level. Your tiredness is completely valid.",
+                "Sleep issues can really impact how we feel and function. You're not alone in dealing with this.",
+                "When sleep doesn't come easily, it affects everything else. That must be really frustrating.",
+                "Rest is so important, and when it's disrupted, it touches every part of our lives."
+            ],
+            "loneliness": [
+                "Feeling disconnected can be one of the most painful experiences. I'm glad you reached out today.",
+                "Loneliness can feel so heavy and isolating. You took a meaningful step by connecting here.",
+                "That sense of being alone is really difficult to carry. You matter, and your feelings are completely valid.",
+                "Feeling isolated can be overwhelming. It means something that you're sharing this with me.",
+                "Connection is such a basic human need. When it's missing, it can feel really profound."
+            ],
+            "general": [
+                "Thank you for sharing what's on your mind. I'm here to listen and support you through this.",
+                "It takes courage to reach out when you're struggling. I'm really glad you're here.",
+                "Whatever you're going through, you don't have to face it alone. I'm here with you.",
+                "I appreciate you opening up about what you're experiencing. Your feelings matter.",
+                "Sharing what's in your heart takes strength. I'm honored that you trust me with this."
+            ]
+        }
+    
+    def _load_context_modifiers(self) -> Dict[str, List[str]]:
+        """Load contextual response modifiers based on sentiment"""
+        return {
+            "very_negative": [
+                "I can hear how much pain you're in right now.",
+                "This sounds incredibly difficult to bear.",
+                "You're going through something really tough.",
+                "I can feel the weight of what you're carrying."
+            ],
+            "negative": [
+                "These feelings are completely valid and understandable.",
+                "What you're experiencing makes complete sense.",
+                "Your emotions are telling you something important.",
+                "It's okay to feel this way."
+            ],
+            "neutral": [
+                "I'm here to listen to whatever you need to share.",
+                "Take your time - there's no rush.",
+                "I'm glad you felt comfortable reaching out.",
+                "Your thoughts and feelings are welcome here."
+            ],
+            "positive": [
+                "I'm glad you felt comfortable sharing this with me.",
+                "It's wonderful that you're taking care of your mental health.",
+                "Thank you for trusting me with your thoughts.",
+                "I appreciate your openness."
+            ]
+        }
+    
+    def _load_conversation_starters(self) -> List[str]:
+        """Load follow-up questions to encourage deeper conversation"""
+        return [
+            "Would you like to tell me more about what's been on your mind?",
+            "How long have you been feeling this way?",
+            "What do you think might help you feel a bit better right now?",
+            "Have you been able to talk to anyone else about this?",
+            "What's been the most challenging part of your day?",
+            "Is there anything specific that triggered these feelings?",
+            "What usually helps you when you're going through difficult times?"
+        ]
     
     def _load_intent_keywords(self) -> Dict[str, List[str]]:
         """Load intent detection keywords"""
@@ -301,23 +390,33 @@ class MindWellBot:
         return detected_intents if detected_intents else ["general"]
     
     def _generate_empathetic_response(self, text: str, sentiment: Dict, intents: List[str]) -> str:
-        """Generate empathetic, non-clinical response"""
-        # Determine primary intent
+        """Generate dynamic empathetic response with randomization and context awareness"""
         primary_intent = intents[0] if intents else "general"
         
-        # Get empathetic response based on intent
-        responses = self.empathetic_responses.get(primary_intent, self.empathetic_responses["general"])
-        base_response = responses[0]  # Use first response for consistency
+        # Get random base response from enhanced responses
+        responses = self.enhanced_responses.get(primary_intent, self.enhanced_responses["general"])
+        base_response = random.choice(responses)
         
-        # Add sentiment-aware follow-up
-        if sentiment['compound'] <= -0.5:  # Very negative sentiment
-            base_response += " I can hear how much pain you're in right now."
-        elif sentiment['compound'] <= -0.1:  # Somewhat negative
-            base_response += " These feelings are completely valid."
-        elif sentiment['compound'] >= 0.1:  # Positive sentiment
-            base_response += " I'm glad you felt comfortable sharing this with me."
+        # Add sentiment-aware context modifier
+        sentiment_score = sentiment['compound']
+        if sentiment_score <= -0.5:
+            modifier = random.choice(self.context_modifiers["very_negative"])
+        elif sentiment_score <= -0.1:
+            modifier = random.choice(self.context_modifiers["negative"])
+        elif sentiment_score >= 0.1:
+            modifier = random.choice(self.context_modifiers["positive"])
+        else:
+            modifier = random.choice(self.context_modifiers["neutral"])
         
-        return base_response
+        # Combine base response with modifier
+        full_response = f"{base_response} {modifier}"
+        
+        # 30% chance to add a conversation starter for engagement
+        if random.random() < 0.3:
+            starter = random.choice(self.conversation_starters)
+            full_response += f"\n\n{starter}"
+        
+        return full_response
     
     def _suggest_exercises(self, intents: List[str], sentiment: Dict) -> List[Dict[str, Any]]:
         """Suggest appropriate guided exercises based on intents and sentiment"""

@@ -151,10 +151,10 @@
                         <h3 class="text-lg font-medium text-cool-gray-900 mb-2">No recent activity</h3>
                         <p class="text-cool-gray-600 mb-4">Start using our health tools to see your activity here.</p>
                         <div class="space-x-3">
-                            <a href="{{ url_for('symptom_checker_page') }}" class="inline-block bg-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors">
+                            <a href="{{ url_for('symptoms') }}" class="inline-block bg-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-teal-700 transition-colors">
                                 Check Symptoms
                             </a>
-                            <a href="{{ url_for('mindwell_page') }}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors">
+                            <a href="{{ url_for('mindwell') }}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors">
                                 Start MindWell
                             </a>
                         </div>
@@ -209,15 +209,15 @@
             <div class="bg-white rounded-2xl shadow-lg p-6">
                 <h2 class="text-xl font-bold text-cool-gray-900 mb-4">Quick Actions</h2>
                 <div class="space-y-3">
-                    <a href="{{ url_for('symptom_checker_page') }}" class="block w-full bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-lg p-3 text-center transition-colors"
+                    <a href="{{ url_for('symptoms') }}" class="block w-full bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-lg p-3 text-center transition-colors"
                        aria-label="Start symptom checker assessment">
                         <span class="text-teal-700 font-medium">Check Symptoms</span>
                     </a>
-                    <a href="{{ url_for('mindwell_page') }}" class="block w-full bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-3 text-center transition-colors"
+                    <a href="{{ url_for('mindwell') }}" class="block w-full bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-3 text-center transition-colors"
                        aria-label="Start MindWell mental health chat">
                         <span class="text-purple-700 font-medium">MindWell Chat</span>
                     </a>
-                    <a href="{{ url_for('providers_page') }}" class="block w-full bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-3 text-center transition-colors"
+                    <a href="{{ url_for('providers') }}" class="block w-full bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-3 text-center transition-colors"
                        aria-label="Find healthcare providers near you">
                         <span class="text-blue-700 font-medium">Find Providers</span>
                     </a>

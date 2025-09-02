@@ -145,6 +145,7 @@ def seed_admin_user():
             password_hash=generate_password_hash('admin123')  # Change in production
         )
         db.session.add(admin_user)
+        db.session.commit()  # Commit user first to get ID
         
         # Create default subscription for admin
         admin_subscription = Subscription(
@@ -153,7 +154,6 @@ def seed_admin_user():
             status='active'
         )
         db.session.add(admin_subscription)
-        
         db.session.commit()
         print("Admin user created: admin@healthlinkai.com / admin123")
 
